@@ -2,6 +2,10 @@
 # GLOBAL IGNORES
 # -------------------------------------------------------
 
+
+#visual studio code
+.vscode/
+
 # Logs
 logs
 *.log
