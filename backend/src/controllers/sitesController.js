@@ -27,7 +27,7 @@ export async function create(req, res) {
 
 export async function update(req, res) {
     try{
-        const site = req.body;
+        const site = await req.body; 
         console.log("Updating site:", site);
         const updateResponse = await siteService.update(req.env.monitor_status_db, site);
         res.json(updateResponse);

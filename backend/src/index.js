@@ -2,6 +2,7 @@ import {env} from "cloudflare:workers"
 import { httpServerHandler } from "cloudflare:node"
 import express from "express"
 import sitesRouter from "./routers/sitesRouter.js";
+import monitorRouter from "./routers/monitorRouter.js";
 
 const app = express();
 
@@ -13,6 +14,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/sites", sitesRouter);
+app.use("/monitor", monitorRouter);
 
 // Health check endpoint
 app.get("/", (req, res) => {
