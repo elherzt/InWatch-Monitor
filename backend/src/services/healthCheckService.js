@@ -74,3 +74,18 @@ export async function saveCheck(db, site, checkResult) {
     return response;
 
 }
+
+export async function getLatestChecks(db, siteId, startTime) {
+    const response = CustomResponse(TypeOfResponse.OK, "Latest checks retrieved successfully", []);
+    try{
+        const { results } = await db.prepare("SELECT * FROM check_history WHERE site_id = ? AND checked_at >= ? ORDER BY checked_at DESC")
+            .bind(siteId, startTime.toISOString())
+            .all(); 
+        response.data = results;
+    } catch (error) {
+        console.error("Error in getLatestChecks service:", error);  
+        response.typeOfResponse = TypeOfResponse.Exception;
+        response.message = error.message;
+    }
+    return response;
+}
