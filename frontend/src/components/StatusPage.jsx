@@ -4,12 +4,14 @@ export default function StatusPage() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const API_URL = import.meta.env.VITE_API_URL;
+
   useEffect(() => {
     let isMounted = true;
 
     async function load() {
       try {
-        const res = await fetch("http://127.0.0.1:8787/reports/status");
+        const res = await fetch(`${API_URL}/reports/status`);
         const json = await res.json();
 
         if (isMounted) {
