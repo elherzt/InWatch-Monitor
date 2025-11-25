@@ -139,7 +139,7 @@ const styles = {
     margin: 0,
     padding: "40px 20px",
     background:
-      "radial-gradient(circle at top, rgba(91,24,255,0.35), transparent 60%), #0c0e19",
+      "radial-gradient(circle at top, #00788e, transparent 60%), #0c0e19",
     display: "flex",
     justifyContent: "center",
     alignItems: "flex-start",
@@ -270,6 +270,6 @@ const styles = {
     height: "60px",
     borderRadius: "50%",
     border: "6px solid rgba(255,255,255,0.15)",
-    borderTopColor: "#6d5dfc"
+    borderTopColor: "#00788e"
   }
 };

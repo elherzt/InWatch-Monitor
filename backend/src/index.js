@@ -8,6 +8,14 @@ import * as healthCheckService  from "./services/healthCheckService.js";
 
 const app = express();
 
+const allowedOrigins =
+  (env.CORS_ALLOWED_ORIGINS || "")
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+
+
+
 // Middlewares
 app.use(express.json());
 app.use((req, res, next) => {
@@ -16,12 +24,22 @@ app.use((req, res, next) => {
 });
 
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "" + env.CORS_ALLOWED_ORIGINS);
+  const origin = req.headers.origin;
+
+  if (allowedOrigins.length === 0) {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+  } else if (origin && allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
+
+  res.setHeader("Vary", "Origin");
   res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+
   if (req.method === "OPTIONS") {
-    return res.sendStatus(204); // resp al preflight
+    return res.sendStatus(204);
   }
+
   next();
 });
 
