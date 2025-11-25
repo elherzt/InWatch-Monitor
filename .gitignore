@@ -162,3 +162,24 @@ backend/.eslintcache
 backend/.stylelintcache
 backend/.yarn-integrity
 
+# -------------------------------------------------------
+# FRONTEND VITE APP IGNORES
+# -------------------------------------------------------
+# Everything below applies specifically to /frontend
+
+# Frontend dependencies and build outputs
+frontend/node_modules/
+frontend/dist
+frontend/.vite
+
+# Frontend environment files
+frontend/.env*
+!frontend/.env.example
+
+# Frontend tooling caches
+frontend/.eslintcache
+frontend/.stylelintcache
+frontend/.npm
+frontend/.yarn/
+frontend/.turbo
+frontend/.pnpm-debug.log*

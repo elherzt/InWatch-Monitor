@@ -1,4 +1,4 @@
-import { CustomResponse, TypeOfResponse } from "../common/CustomReponse";
+import { CustomResponse, TypeOfResponse } from "../common/CustomReponse.js";
 import * as HealthCheckService from "./healthCheckService.js";
 
 export async function globalReport(db) {
