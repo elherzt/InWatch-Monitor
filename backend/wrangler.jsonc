@@ -22,7 +22,8 @@
 	],
 	"vars": {
 		"HOURS_REPORTING_CHECKS": 2,
-		"CORS_ALLOWED_ORIGINS": "http://localhost:5173,https://inwatch-monitor.pages.dev"
+		"CORS_ALLOWED_ORIGINS": "http://localhost:5173",
+		"CHECK_RETENTION_HOURS": 24
 	},
 	"triggers": {
     "crons": [

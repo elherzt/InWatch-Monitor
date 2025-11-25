@@ -78,12 +78,29 @@ export async function saveCheck(db, site, checkResult) {
 export async function getLatestChecks(db, siteId, startTime) {
     const response = CustomResponse(TypeOfResponse.OK, "Latest checks retrieved successfully", []);
     try{
-        const { results } = await db.prepare("SELECT * FROM check_history WHERE site_id = ? AND checked_at >= ? ORDER BY checked_at DESC")
+        const { results } = await db.prepare("SELECT * FROM check_history WHERE site_id = ? AND checked_at >= ? ORDER BY checked_at")
             .bind(siteId, startTime.toISOString())
             .all(); 
         response.data = results;
     } catch (error) {
         console.error("Error in getLatestChecks service:", error);  
+        response.typeOfResponse = TypeOfResponse.Exception;
+        response.message = error.message;
+    }
+    return response;
+}
+
+export async function clearOldChecks(db) {
+    const response = CustomResponse(TypeOfResponse.OK, "Old checks cleared successfully", null);
+    try{
+        const retentionPeriodHours = parseInt(process.env.CHECK_RETENTION_HOURS) || 24; // default 1 day
+        const cutoffDate = new Date(Date.now() - retentionPeriodHours * 60 * 60 * 1000);
+        const result = await db.prepare("DELETE FROM check_history WHERE checked_at < ?")
+            .bind(cutoffDate.toISOString())
+            .run();
+        response.message = `Old checks cleared successfully, rows deleted: ${result.meta.changes}`;
+    } catch (error) {
+        console.error("Error in clearOldChecks service:", error);  
         response.typeOfResponse = TypeOfResponse.Exception;
         response.message = error.message;
     }

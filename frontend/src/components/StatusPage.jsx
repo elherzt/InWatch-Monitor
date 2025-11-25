@@ -101,7 +101,8 @@ function StatusRow({ item }) {
       <td style={styles.tdMuted}>{item.site_id}</td>
       <td style={styles.tdMain}>
         <span style={styles.siteName}>{item.displayname}</span>
-        <span style={styles.siteUrl}>{item.site_url || item.url || "—"}</span>
+        
+        <ChecksTimeline checks={item.checks} />
       </td>
       <td style={styles.tdStatus}>
         <span style={{ ...styles.statusBadge, backgroundColor: statusColor, color: badgeColor }}>
@@ -110,6 +111,34 @@ function StatusRow({ item }) {
       </td>
       <td style={styles.tdMuted}>{formatTimestamp(item.latest_checked_at)}</td>
     </tr>
+  );
+}
+
+function ChecksTimeline({ checks }) {
+  if (!checks || checks.length === 0) return null;
+
+  return (
+    <div style={styles.timeline}>
+     
+      <div style={styles.timelineTrack}>
+        {checks.map((check) => {
+          const ok = check.status_code === 200;
+          const dotColor = ok ? "#1fb58f" : "#ff5f6d";
+          const ringColor = ok ? "rgba(31, 181, 143, 0.2)" : "rgba(255, 95, 109, 0.25)";
+          return (
+            <span
+              key={check.id}
+              title={`${formatTimestamp(check.checked_at)} · Código ${check.status_code} · ${formatResponseTime(check.response_time_ms)}`}
+              style={{
+                ...styles.timelineDot,
+                backgroundColor: dotColor,
+                boxShadow: `0 0 0 2px ${ringColor}`
+              }}
+            />
+          );
+        })}
+      </div>
+    </div>
   );
 }
 
@@ -129,8 +158,16 @@ const dateFormatter = new Intl.DateTimeFormat("es-MX", {
 });
 
 function formatTimestamp(value) {
-  if (!value) return "—";
+  if (!value) return "–";
   return dateFormatter.format(new Date(value));
+}
+
+function formatResponseTime(value) {
+  if (typeof value !== "number") {
+    return "N/D";
+  }
+  const ms = Math.round(value * 1000); // backend envía segundos
+  return `${ms} ms`;
 }
 
 const styles = {
@@ -229,7 +266,10 @@ const styles = {
   },
   tdMain: {
     padding: "20px 24px",
-    borderBottom: "1px solid rgba(255,255,255,0.05)"
+    borderBottom: "1px solid rgba(255,255,255,0.05)",
+    display: "flex",
+    flexDirection: "column",
+    gap: "10px"
   },
   siteName: {
     display: "block",
@@ -271,5 +311,28 @@ const styles = {
     borderRadius: "50%",
     border: "6px solid rgba(255,255,255,0.15)",
     borderTopColor: "#00788e"
+  },
+  timeline: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "6px"
+  },
+  timelineLabel: {
+    fontSize: "0.7rem",
+    letterSpacing: "0.08em",
+    textTransform: "uppercase",
+    color: "rgba(255,255,255,0.45)"
+  },
+  timelineTrack: {
+    display: "flex",
+    gap: "8px",
+    alignItems: "center"
+  },
+  timelineDot: {
+    width: "12px",
+    height: "12px",
+    borderRadius: "50%",
+    transition: "transform 0.2s ease",
+    cursor: "pointer"
   }
 };

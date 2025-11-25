@@ -60,9 +60,11 @@ app.listen(3000);
 const worker = httpServerHandler({ port: 3000 });
 
 async function scheduled(controller, env, ctx) {
-   console.log("cron triggered");
+   
     await healthCheckService.doCheck(env.monitor_status_db);
-    console.log("cron processed");
+    await healthCheckService.clearOldChecks(env.monitor_status_db);
+
+    
 }
 
 export default { ...worker, scheduled };
