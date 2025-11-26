@@ -15,3 +15,7 @@ create table if NOT EXISTS check_history (
     checked_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (site_id) REFERENCES sites(id) ON DELETE CASCADE
 );
+
+
+CREATE INDEX idx_history_site ON check_history(site_id);
+CREATE INDEX idx_history_site_checked ON check_history(site_id, checked_at);
