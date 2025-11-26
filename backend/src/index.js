@@ -4,7 +4,9 @@ import express from "express"
 import sitesRouter from "./routers/sitesRouter.js";
 import monitorRouter from "./routers/monitorRouter.js";
 import reportsRouter from "./routers/reportsRoputer.js";
+import authRouter from "./routers/authRouter.js";
 import * as healthCheckService  from "./services/healthCheckService.js";
+import { requireAuth } from "./common/authMiddleware.js";
 
 const app = express();
 
@@ -23,6 +25,7 @@ app.use((req, res, next) => {
   next();
 });
 
+// cors
 app.use((req, res, next) => {
   const origin = req.headers.origin;
 
@@ -45,9 +48,12 @@ app.use((req, res, next) => {
 
 
 // Routers
-app.use("/sites", sitesRouter);
-app.use("/monitor", monitorRouter);
+app.use("/sites", requireAuth, sitesRouter);
+app.use("/monitor", requireAuth, monitorRouter);
+
+// no auth routers
 app.use("/reports", reportsRouter);
+app.use("/auth", authRouter);
 
 // Health check endpoint
 app.get("/", (req, res) => {
