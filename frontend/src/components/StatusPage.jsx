@@ -5,6 +5,7 @@ export default function StatusPage() {
   const [loading, setLoading] = useState(true);
 
   const API_URL = import.meta.env.VITE_API_URL;
+  const REFRESH_INTERVAL_MS = import.meta.env.VITE_REFRESH_INTERVAL_MS || 300000; // 5 minutos default
 
   useEffect(() => {
     let isMounted = true;
@@ -27,7 +28,7 @@ export default function StatusPage() {
     }
 
     load();
-    const interval = setInterval(load, 30_000); // refresco suave cada 30s
+    const interval = setInterval(load, REFRESH_INTERVAL_MS); 
 
     return () => {
       isMounted = false;
