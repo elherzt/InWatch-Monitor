@@ -326,13 +326,13 @@ const styles = {
   },
   timelineTrack: {
     display: "flex",
-    gap: "8px",
-    alignItems: "center"
+    gap: "3px",
+    alignItems: "center",
+    justifyContent: "center"
   },
   timelineDot: {
-    width: "12px",
-    height: "12px",
-    borderRadius: "50%",
+    width: "10px",
+    height: "24px",
     transition: "transform 0.2s ease",
     cursor: "pointer"
   }
